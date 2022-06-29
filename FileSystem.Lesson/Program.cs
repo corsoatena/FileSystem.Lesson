@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace FileSystem.Lesson
         static void Main(string[] args)
         {
 
-            FindOrCreate(@"C:\CorsoAtena"); // C:\Download\miofile
+            SimpleFileDelete(@"C:\CorsoAtena1\", "Corso.txt"); 
             //string MySystem = "W";
             //string myDirectory = "downloads";
 
@@ -108,5 +109,46 @@ namespace FileSystem.Lesson
                 Console.WriteLine(info.Parent);
             }   
         }
-    }
+        static void CreateFile(string FileName)
+        {
+            File.Create(FileName);
+        }
+        static void WriteOnFile(string path, string FileName)
+        {
+            List<string> mytext = new List<string>()
+            {
+                "Heello by Bruno",
+                "Heello by marco",
+                "Heello by Maria"
+            };
+
+            File.AppendAllLines(Path.Combine(path, FileName), mytext);
+        }
+        static void ReadOnFile(string path, string FileName)
+        {
+            var texd = File.ReadAllText(Path.Combine(path, FileName));
+            Console.WriteLine(texd);
+        } 
+        static void SimpleFileMove(string SrcPath, string destPath, string Filename)
+        {
+            string Src = Path.Combine(SrcPath, Filename);
+            string dest = Path.Combine(destPath, Filename);
+            File.Move(Src, dest);
+        }
+        static void SimpleFileCopy(string SrcPath, string destPath, string Filename)
+        {
+            string Src = Path.Combine(SrcPath, Filename);
+            string dest = Path.Combine(destPath, Filename);
+            File.Copy(Src, dest,true); 
+        }
+        static void SimpleFileDelete(string SrcPath, string Filename)
+        {
+           
+            File.Delete(Path.Combine(SrcPath, Filename));
+            
+        }
+
+
+    } 
+   
 }
