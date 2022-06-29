@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace FileSystem.Lesson
 {
@@ -8,7 +9,7 @@ namespace FileSystem.Lesson
         static void Main(string[] args)
         {
 
-            SplitPath(); 
+            FindOrCreate(@"C:\CorsoAtena"); // C:\Download\miofile
             //string MySystem = "W";
             //string myDirectory = "downloads";
 
@@ -46,8 +47,66 @@ namespace FileSystem.Lesson
 
             foreach (var item in splitedPath)
             {
+                int counter = 1;
+                Console.Write(counter + "-"); 
                 Console.WriteLine(item);
+                counter++; 
             }
+             JoinPath(splitedPath); 
+        }
+        static void JoinPath(string[] _path)
+        {   
+            
+            var path =  Path.Combine(_path);
+            Console.Write("JOINED STRINGS: ");
+            Console.WriteLine(path);
+        } 
+        static void GetFileExtention() 
+        {
+            var fExt = Path.GetExtension("vendita.json"); 
+        }
+        static void GetDirInfo()
+        {
+            string path = Directory.GetCurrentDirectory(); // -> trova il Path 
+            DirectoryInfo dInfos = new DirectoryInfo(path);
+
+            //foreach (var info in dInfos.GetDirectories())
+            //{
+            //    Console.WriteLine(info.Parent);
+            //}
+
+            foreach (var item in dInfos.GetFiles())
+            {
+                Console.WriteLine(item.Name);
+
+            }
+        }
+        static void SearchInDirectory()
+        {
+            var files = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), 
+                "*.txt",
+                SearchOption.AllDirectories);
+
+            foreach (var file in files)
+                Console.WriteLine(file);
+        }
+        static void FindOrCreate(String path)
+        {
+            DirectoryInfo info = new DirectoryInfo(path);   
+
+            if(info.Exists)
+            {
+                Console.WriteLine(info.FullName);
+                Console.WriteLine(info.Name);
+                Console.WriteLine(info.Parent);
+            }
+            else
+            {
+                info.Create();
+                Console.WriteLine(info.FullName);
+                Console.WriteLine(info.Name);
+                Console.WriteLine(info.Parent);
+            }   
         }
     }
 }
