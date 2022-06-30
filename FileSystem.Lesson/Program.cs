@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,23 +10,13 @@ namespace FileSystem.Lesson
     {
         static void Main(string[] args)
         {
+             List<User> users = new List<User>() 
+                { 
+                    new User() { Name = "Bruno", Saldo = 4000.00M }, 
+                    new User() { Name = "Marco", Saldo = 2000.00M } 
+                };
 
-            SimpleFileDelete(@"C:\CorsoAtena1\", "Corso.txt"); 
-            //string MySystem = "W";
-            //string myDirectory = "downloads";
-
-            //if (MySystem.Equals("W"))
-            //{
-            //    SpecialPath("C:", myDirectory);
-            //    SpecialDirectory();
-
-            //}
-            //else
-            //{
-            //    SpecialPath("home", myDirectory);
-            //    SpecialDirectory();
-
-            //}
+             WriteAsTabular(@"C:\CorsoAtena", @"Test.txt", users);
         }
         static void SpecialPath(string RootPath, String MyDir) // Path  = percorso LOCAL  -> REMOTE path -> SERVER , URL 
         {
@@ -142,13 +133,41 @@ namespace FileSystem.Lesson
             File.Copy(Src, dest,true); 
         }
         static void SimpleFileDelete(string SrcPath, string Filename)
+        {           
+            File.Delete(Path.Combine(SrcPath, Filename));            
+        }
+        static void DeserializeData()
+        {     
+           // var value = JsonConvert.DeserializeObject<List<KeyValuePair<string, object>>>(jsonString).ToDictionary(x => x.Key, y => y.Value);
+        }
+        static void WriteAsTabular(string path, string Filename, List<User> data)
         {
+          
+            StringBuilder sb = new StringBuilder(); 
+
+            string FilePath = Path.Combine(path, Filename);
+
+            if (!File.Exists(FilePath))
+            {
+                string header = string.Format("Nome,saldo");
+                sb.AppendLine(header);
+            }
+
+            foreach (var usr in data)
+            {
+                sb.AppendLine(string.Format($"{usr.Name},{usr.Saldo}"));
+            }
+            File.AppendAllText(FilePath, sb.ToString()); // - string 
+
            
-            File.Delete(Path.Combine(SrcPath, Filename));
-            
         }
 
+    }
+    public class User
+    {
+        public string Name { get; set; } 
+        public decimal Saldo { get; set; }
 
-    } 
-   
+    }
+
 }
